@@ -1,0 +1,69 @@
+[gd_scene load_steps=7 format=3 uid="uid://b2n2ix6pdbfsn"]
+
+[ext_resource type="Script" path="res://scenes/player.gd" id="1_tyd0c"]
+[ext_resource type="Texture2D" uid="uid://dddq61ysml15a" path="res://graphics/Modern tiles/Characters_free/Alex_idle_16x16.png" id="2_8hdaj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2emsg"]
+size = Vector2(15, 18)
+
+[sub_resource type="Gradient" id="Gradient_3m8te"]
+interpolation_mode = 2
+colors = PackedColorArray(0.638884, 2.02149e-06, 4.81307e-07, 1, 1, 1, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_lw7ob"]
+gradient = SubResource("Gradient_3m8te")
+use_hdr = true
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nfqst"]
+emission_shape = 3
+emission_box_extents = Vector3(10, 1.27, 1)
+particle_flag_disable_z = true
+gravity = Vector3(0, 98, 0)
+initial_velocity_min = 10.52
+initial_velocity_max = 21.05
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+linear_accel_max = 100.0
+radial_accel_max = 100.0
+tangential_accel_max = 100.0
+angle_min = -227.4
+angle_max = 197.1
+scale_max = 3.0
+color_ramp = SubResource("GradientTexture1D_lw7ob")
+collision_mode = 1
+collision_friction = 0.07
+collision_bounce = 0.36
+collision_use_scale = true
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_tyd0c")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_8hdaj")
+region_enabled = true
+region_rect = Rect2(48.319, 13, 16, 18)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_2emsg")
+
+[node name="SwingTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(0, 7)
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_nfqst")
+lifetime = 0.5
+one_shot = true
+speed_scale = 1.7
+explosiveness = 0.62
+randomness = 0.46
+fixed_fps = 60
+visibility_rect = Rect2(-25, 0, 50, 40)
+local_coords = true
+
+[node name="SwingMarker" type="Marker2D" parent="."]
+
+[connection signal="timeout" from="SwingTimer" to="." method="_on_timer_timeout_reset_can_swing"]
